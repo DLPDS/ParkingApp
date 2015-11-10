@@ -1,0 +1,7 @@
+{
+    "jwtClient":{
+      "headerName" : "X-JWT-Assertion",
+      "certificatePath" : "repository/tenants/4378/jaggeryapps/wso2parkingapp-default-SNAPSHOT/resources/star.private.wso2.com.crt",
+    }
+
+}

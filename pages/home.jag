@@ -1,0 +1,201 @@
+<%
+var contextPath=request.getContextPath();
+var log = new Log();
+var uri = request.getRequestURI();
+log.info(uri+" home uri");
+log.info("calling parking app ... ");
+log.info(session.get('username')+" home.jag");
+if(session.get('username')){
+	
+	try{
+		var url  = "https://gateway.api.cloud.wso2.com:8243/t/dlpds3331/carparksystem/1.0.0/GeTParkingData";
+		var payload = {};
+		var type = "xml";
+		var headers = {"Authorization":"Bearer 5d6ed04f577a7ed7d6848bbfa1b25b7"};
+		log.info("before calling get *********");
+		var rtnObject = get(url,payload,headers,type);
+		//print(rtnObject);
+		log.info("After calling get ****");
+		var xmlObject=rtnObject.data;
+		if(xmlObject){
+			var myData = [];
+			for (var i=0;i<xmlObject.children().length();i++){
+				var temp=[];
+				var dateStr= xmlObject.child(i).child(2);
+				var dateArr=dateStr.split(/[- : T +]/);
+				var d = new Date(dateArr[0], dateArr[1]-1, dateArr[2], dateArr[3], dateArr[4], dateArr[5]);
+				d.setHours(d.getHours()+5);
+				d.setMinutes(d.getMinutes()+30);
+				var id = xmlObject.child(i).child(0).child(0);
+				var date = d.toLocaleDateString();
+				var time = d.toLocaleTimeString().substring(0,d.toLocaleTimeString().length-3) ;
+				var status = xmlObject.child(i).child(1).child(0);
+				temp.push(id,date,time,status);
+				myData.push(temp);
+			}
+		
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>WSO2 Parking Status</title>
+
+<link rel="shortcut icon" href="../libs/theme-wso2_1.0/images/favicon.png" />
+
+<!-- Bootstrap CSS -->
+<link href="../libs/bootstrap_3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+<!-- DataTable CSS -->
+<link href="../libs/data-tables_1.10.7/extensions/Bootstrap/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="../libs/data-tables_1.10.7/extensions/Responsive/css/dataTables.responsive.css" rel="stylesheet" type="text/css" />
+
+<!-- Font WSO2 CSS -->
+<link href="../libs/font-wso2_1.2/css/font-wso2.css" rel="stylesheet" type="text/css" />
+
+<!-- Theme WSO2 CSS -->
+<link href="../libs/theme-wso2_1.0/css/theme-wso2.css" rel="stylesheet" type="text/css" />
+
+<!-- Custom CSS -->
+<link href="../css/custom.css" rel="stylesheet" type="text/css" />
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="libs/html5shiv_3.7.2/html5shiv.min.js"></script>
+<script src="libs/respond_1.4.2/respond.min.js"></script>
+<![endif]-->
+    
+</head>
+<body >
+	<!-- header -->
+	<header class="header header-default">
+		<div class="container-fluid">
+			<div class="pull-left brand float-remove-xs text-center-xs">
+				<a href="#"> <img src="../libs/theme-wso2_1.0/images/logo-inverse.svg" alt="wso2" title="wso2" class="logo"><h1>WSO2 Parking Status</h1></a>
+			</div>
+			<div class="pull-right auth float-remove-xs text-center-xs">
+				<a href="#" class="dropdown" data-toggle="dropdown"> <span class="hidden-xs add-padding-left-3x"><%=session.get('username')%><span class="caret"></span></span> 
+				<span class="icon fw-stack fw-lg"> <i class="fw fw-user fw-stack-1x"></i></span></a>
+				<ul class="dropdown-menu float-remove-xs position-static-xs text-center-xs remove-margin-xs slideInDown" role="menu">
+					<li class="dropdown-header visible-xs"><%=session.get('username')%><span class="caret"></span></li>
+					<li class="divider visible-xs"></li>
+					<li><a href="../api/client/logout">Sign out</a></li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	<!-- #page-content-wrapper -->
+	<div class="page-content-wrapper">
+
+		<!-- page content -->
+		<div class="container-fluid body-wrapper">
+		
+			<div class="page-header">
+                <h1>WSO2 Parking Status - <span id="clock"></span></h1>
+            </div>
+            
+            <div class="row">
+        		<div class="col-lg-12 ">
+            		<label>Park A :</label> <span class="add-margin-right-5x"><i class="<%=myData[0][3] == 'Available' ? 'fw fw-ok icon-success indicator' : 'fw fw-error icon-danger indicator'%>"></i> <%=myData[0][3]%></span>
+            		<label>Park B :</label> <span class="add-margin-right-5x"><i class="<%=myData[1][3] == 'Available' ? 'fw fw-ok icon-success indicator' : 'fw fw-error icon-danger indicator'%>"></i> <%=myData[1][3]%></span>
+            		<label>Park C :</label> <span class="add-margin-right-5x"><i class="<%=myData[2][3] == 'Available' ? 'fw fw-ok icon-success indicator' : 'fw fw-error icon-danger indicator'%>"></i> <%=myData[2][3]%></span>
+        		</div>
+			</div>
+			
+			<br class="spacer">
+			
+			<div>
+				<table id="parking" class="table table-striped table-hover table-bordered display data-table" cellspacing="0"></table>
+			</div>
+			
+		</div>
+
+	</div>
+	<!-- /#page-content-wrapper -->
+
+	<!-- footer -->
+	<footer class="footer">
+		<div class="container-fluid">
+			<p>
+				WSO2 Parcking Space | &copy;
+				<script>document.write(new Date().getFullYear());</script>
+				<a href="http://wso2.com/" target="_blank"><i class="icon fw fw-wso2"></i> Inc</a>. All Rights Reserved.
+			</p>
+		</div>
+	</footer>
+
+</body>
+
+<!-- Jquery/Jquery UI JS -->
+<script src="../libs/jquery_1.11.0/jquery-1.11.3.min.js"></script>
+
+<!-- Jquery Resize JS -->
+<script src="../libs/jquery-resize_0.5.3/jquery.resize.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="../libs/bootstrap_3.3.5/js/bootstrap.min.js"></script>
+
+<!-- Data Tables JS -->
+<script src="../libs/data-tables_1.10.7/media/js/jquery.dataTables.min.js"></script>
+<script src="../libs/data-tables_1.10.7/extensions/Bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../libs/data-tables_1.10.7/extensions/Responsive/js/dataTables.responsive.js"></script>
+
+<!-- Theme WSO2 JS -->
+<script src="../libs/theme-wso2_1.0/js/theme-wso2.js"></script>
+
+<!-- Custom JS -->
+<script src="../js/custom.js"></script>
+
+
+
+<script>
+
+    $(document).ready(function() {
+    	$('#parking').DataTable({
+        	data: <%= myData %>,
+        	dom:'<"dataTablesTop"' +
+	            'f' +
+	            '<"dataTables_toolbar">' +
+	        '>' +
+	        'rt' +
+	        '<"dataTablesBottom"' +
+	            'lip' +
+	        '>',
+	    	columns: [  
+	      	    { "title": "ID" },
+	            { "title": "Date" },
+	            { "title": "Time" },
+	            { "title": "Status" }
+	        ],
+	        responsive: true
+	    });
+     }); 
+		
+		</script>
+
+</html>
+
+<%
+		}else{
+			log.error(e);
+			//response.sendRedirect(contextPath+"/pages/undifined.jag");
+			print("e");
+		}
+	}catch(err){
+		log.error(err);
+		//response.sendRedirect(contextPath+"/pages/undifined.jag");
+		print(err);
+	}
+
+}else{
+	log.info("session don't have attr");
+	response.sendRedirect(contextPath+"/pages/loginPage.jag");
+
+}
+%>

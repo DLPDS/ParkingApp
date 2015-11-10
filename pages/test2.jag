@@ -1,0 +1,22 @@
+
+// Assuming your module name is 'test' and this code resides in within the test module. 
+var absolute = function(path) {
+var process = require('process');
+var parent = 'file:///' + (process.getProperty('jaggery.home') || process.getProperty('carbon.home')).replace(/[
+]/g, '/').replace(/^[\/]/g, '');
+return parent + '/pages/' + path;
+};
+
+
+// file <HOME>/modules/test/script1.js
+var send1 = function() {
+var f = new File(absolute('/test.txt'));
+print(f.getStream());
+};
+
+
+// file <HOME>/modules/test/scripts/script2.js
+var send2 = function() {
+var f = new File(absolute('/scripts/script2.js'));
+print(f.getStream());
+};

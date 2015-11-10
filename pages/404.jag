@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>WSO2 Parking Status</title>
+
+<link rel="shortcut icon" href="../libs/theme-wso2_1.0/images/favicon.png" />
+
+<!-- Bootstrap CSS -->
+<link href="../libs/bootstrap_3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+<!-- Font WSO2 CSS -->
+<link href="../libs/font-wso2_1.2/css/font-wso2.css" rel="stylesheet" type="text/css" />
+
+<!-- Theme WSO2 CSS -->
+<link href="../libs/theme-wso2_1.0/css/theme-wso2.css" rel="stylesheet" type="text/css" />
+
+<!-- Custom CSS -->
+<link href="../css/custom.css" rel="stylesheet" type="text/css" />
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="libs/html5shiv_3.7.2/html5shiv.min.js"></script>
+<script src="libs/respond_1.4.2/respond.min.js"></script>
+<![endif]-->
+    
+</head>
+<body>
+
+    <!-- header -->
+    <header class="header header-default">
+        <div class="container-fluid">
+           <div class="pull-left brand float-remove-xs text-center-xs">
+              <a href="#">
+                 <img src="../libs/theme-wso2_1.0/images/logo-inverse.svg" alt="wso2" title="wso2" class="logo">
+                 <h1>WSO2 Parking Application</h1>
+              </a>
+           </div>
+           <div class="pull-right auth float-remove-xs text-center-xs">
+             <a href="#" class="dropdown" data-toggle="dropdown">
+               <span class="hidden-xs add-padding-left-3x">administrator <span class="caret"></span></span>
+               <span class="icon fw-stack fw-lg">
+                   <i class="fw fw-user fw-stack-1x"></i>
+               </span>
+             </a>
+             <ul class="dropdown-menu float-remove-xs position-static-xs text-center-xs remove-margin-xs slideInDown" role="menu">
+               <li class="dropdown-header visible-xs">administrator <span class="caret"></span></li>
+               <li class="divider visible-xs"></li>
+               <li><a href="../api/client/logout">Sign out</a></li>
+             </ul>
+
+           </div>
+        </div>
+    </header>
+
+   	<!-- navbar -->
+    <nav class="navbar navbar-default" data-spy="affix" data-offset-top="50" data-offset-bottom="40">
+        <div class="container-fluid">
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                	<li>
+                        <a href="../api/client/logout">
+                            <span class="icon fw-stack">
+                                <i class="fw fw-home fw-stack-1x"></i>
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                            </span>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../api/client/logout">
+                            <span class="icon fw-stack">
+                                <i class="fw fw-application fw-stack-1x"></i>
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                            </span>
+                            Add Data
+                        </a>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+
+
+    <!-- #page-content-wrapper -->
+    <div class="page-content-wrapper">
+
+        <!-- page content -->
+        <div class="container-fluid body-wrapper">
+
+            <div id="demohbs"></div>
+
+            <!-- ******************************************************************
+            Message Templates
+            ******************************************************************* -->
+            <div class="alert alert-success" role="alert">
+                <i class="icon fw fw-ok"></i><strong>404</strong>
+                404 ERROR
+                <button type="button" class="close" aria-label="close" data-dismiss="alert"><span aria-hidden="true"><i class="fw fw-cancel"></i></span></button>
+            </div>
+
+            <br class="spacer">
+        </div>
+
+    </div><!-- /#page-content-wrapper -->
+    
+	<!-- footer -->
+	<footer class="footer">
+		<div class="container-fluid">
+			<p>
+				WSO2 Parcking Space | &copy;
+				<script>document.write(new Date().getFullYear());</script>
+				<a href="http://wso2.com/" target="_blank"><i class="icon fw fw-wso2"></i> Inc</a>. All Rights Reserved.
+			</p>
+		</div>
+	</footer>
+      
+</body>
+
+<!-- Jquery/Jquery UI JS -->
+<script src="../libs/jquery_1.11.0/jquery-1.11.3.min.js"></script>
+
+<!-- Jquery Resize JS -->
+<script src="../libs/jquery-resize_0.5.3/jquery.resize.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="../libs/bootstrap_3.3.5/js/bootstrap.min.js"></script>
+
+<!-- Data Tables JS -->
+<script src="../libs/data-tables_1.10.7/media/js/jquery.dataTables.min.js"></script>
+<script src="../libs/data-tables_1.10.7/extensions/Bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../libs/data-tables_1.10.7/extensions/Responsive/js/dataTables.responsive.js"></script>
+
+<!-- Theme WSO2 JS -->
+<script src="../libs/theme-wso2_1.0/js/theme-wso2.js"></script>
+
+<!-- Custom JS -->
+<script src="../js/custom.js"></script>
+
+</html>

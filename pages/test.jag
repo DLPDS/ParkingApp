@@ -1,0 +1,18 @@
+<%
+// var jwtClientModule = require('test.js');
+// jwtClientModule.getPublicKey();
+
+
+//require('test2.jag').send1();
+try{
+// 	var process = require('process');
+// 	var parent = 'file:///' + (process.getProperty('jaggery.home') || process.getProperty('carbon.home')).replace(/[ ]/g, '/').replace(/^[\/]/g, '');
+// 	//print(process.getProperty('jaggery.home').replace(/[ ]/g, '/').replace(/^[\/]/g, '');
+ 	var jwtClientModule = require('test.js');
+	jwtClientModule.getPublicKey();
+// 	print(process.getProperty('jaggery.home'));
+
+}catch(e){
+	print(e);
+}
+%>

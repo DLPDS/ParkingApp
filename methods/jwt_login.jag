@@ -1,0 +1,118 @@
+<%
+  authenticateAndAuthorize();
+  var contextPath=request.getContextPath();
+
+  function authenticateAndAuthorize(){
+    try{
+      jwtClient.parse(); 
+      	//print('debug');
+      if(jwtClient.verify()){
+        log.debug("Verified the signature of the JWT.");
+        //print('debug');
+
+        var subject = jwtClient.getSubject();
+        var issuer = jwtClient.getIssuer();
+        var claims = jwtClient.getClaims();
+
+        setSessionAttributes(subject, issuer, claims);
+
+        authorizeAndContinue();
+
+      }else{
+        logAndShowError("Authentication failure. Cannot verify the JWT signature.");
+      }
+    }catch(e){
+      logAndShowError("Authentication failure. Something went wrong ", e);
+      //response.sendRedirect(contextPath+"/pages/undifined.jag");
+    }
+
+  }
+
+  function setSessionAttributes(subject, issuer, claims){
+
+    session.put("logged-in", "true");
+    log.info(session.get('logged-in')+"##########3");
+    session.put("username", subject);
+    session.put("userEmail", subject);
+
+    var roles = claims.get("http://wso2.org/claims/role");
+
+    if(roles){
+
+      roles = roles.split(',');
+      //print(roles);
+
+      for(var i = 0; i < roles.length; i++) {
+         if (roles[i] == "wso2.all.employees"){
+           var roleN = roles[i];
+           session.put("roleN", roleN);
+         }
+         if (roles[i] == "wso2.carpark.security" ){
+           var roleE = roles[i];
+           session.put("roleE", roleE);
+         }
+         if (roles[i] == "wso2.interns" ){
+         var roleI = roles[i];
+         session.put("roleI", roleI);
+         }
+      }
+    }
+
+  }
+
+  function authorizeAndContinue(){
+
+    var roleE = session.get("roleE");
+    var roleN = session.get("roleN");
+    var roleI = session.get("roleI");
+    var userName = session.get("username");
+    log.info("roleE"+roleE);
+    log.info("roleN"+roleN);
+    //log.info("roleE"+roleE);
+    
+    if (roleE) {
+    	response.sendRedirect(contextPath+"/pages/postData.jag");
+    } else if (roleN || roleI) {
+    	log.info("before redirect to home page");
+    	response.sendRedirect("pages/home.jag");
+    	log.info("after redirect to home page");
+    } else {
+    	response.sendRedirect(contextPath+"/pages/404.jag");
+    }
+
+//     if (!roleE){
+//       session.invalidate();
+//       response.sendRedirect("index.jag?reject=login");
+//       log.info("################# "+userName +" : U are not an Engineer ###############");
+//     }else {
+//        var urlLoc = request.getParameter("location");
+//       if (!urlLoc || urlLoc == "null" ){
+//         if (roleN) {
+//           log.info("################# "+userName + " is A PMT admin ###############");
+//         }
+//         log.info("################# "+userName + " logged into the PMT system ###############");
+//         //response.sendRedirect("pages/work_log.jag");
+//       }else {
+//         if (roleN) {
+//           log.info("################# "+userName + " is A PMT admin ###############");
+//         }
+//         log.info("################# "+userName + " logged into the PMT system ###############");
+//         //response.sendRedirect(urlLoc);
+//       }
+//     }
+
+  }
+
+  function logAndShowError(errorMessage, error){
+
+    session.put("appm-error-message", errorMessage);
+
+    if(error){
+      errorMessage = errorMessage + " - " + error;
+    }
+
+    log.warn(errorMessage);
+
+    //include("login-error.jag");
+  }
+%>

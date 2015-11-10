@@ -1,0 +1,69 @@
+<%
+var uri = request.getRequestURI();
+var contextPath=request.getContextPath();
+var uriMatcher = new URIMatcher(String(uri));
+var log = new Log();
+log.info("calling post_data");
+
+if (uriMatcher.match("/{context}/{companyName}/{appName}/{defaultName}/api/client/login/")) {
+	logMe();
+}
+
+if (uriMatcher.match("/{context}/{companyName}/{appName}/{defaultName}/api/client/postData/")) {
+	updateData();
+}
+
+if (uriMatcher.match("/{context}/{companyName}/{appName}/{defaultName}/api/client/logout/")) {
+	logOut();
+}
+
+function updateData(){
+	var parkName=request.getParameter("selectPark");
+	var status=request.getParameter("selectStatus");
+	var url  = "https://gateway.api.cloud.wso2.com:8243/t/dlpds3331/carparksystem/1.0.0/AddParkingData";
+	var payload = {ParkID: parkName,Status: status};
+		var headers = {"Authorization":"Bearer 5d6ed04f577a7ed7d6848bbfa1b25b7", "Accept":"application/xml"};
+
+			if(parkName==null||status==null){
+				logOut();
+			}else{
+				try {
+					log.info("calling post_data post method");
+					var updateDB= post(url,payload,headers);
+					log.info("after calling post_data post method");
+					if(updateDB){
+						session.put('smsg','success');
+							
+					}
+					response.sendRedirect(contextPath+"/pages/postData.jag");
+				}catch (err){
+					log.error(err);
+					session.put('smsg','fail');
+					response.sendRedirect(contextPath+"/pages/postData.jag");
+				}
+			}
+
+}
+
+function logMe(){
+	session.put("oAuthKey","1234567890");
+	response.sendRedirect(contextPath+"/pages/home.jag");
+}
+
+function logOut(){
+	try{
+// 		session.remove('logged-in');
+// 		session.remove('username');
+// 		session.remove('userEmail');
+// 		session.remove('roleN');
+// 		session.remove('roleE');
+		session.invalidate();
+		response.sendRedirect(contextPath+"/pages/loginPage.jag");
+	}catch(err){
+		log.error(err);
+		response.sendRedirect(contextPath+"/pages/undifined.jag");
+	}
+}
+
+%>
+
